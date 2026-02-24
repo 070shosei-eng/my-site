@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物販管理表 スマホ対応版</title>
+
+<style>
+body{font-family:sans-serif;background:#f4f6f9;margin:0;}
+header{
+display:flex;
+justify-content:space-around;
+background:#1976d2;
+color:white;
+padding:12px;
+font-weight:bold;
+position:sticky;
+top:0;
+z-index:100;
+}
+header button{
+background:none;
+border:none;
+color:white;
+font-size:16px;
+font-weight:bold;
+}
+
+.page{display:none;padding:12px;}
+.active{display:block;}
+
+.box{background:white;padding:12px;border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.15);}
+
+input,select,button{
+width:100%;
+padding:10px;
+margin:6px 0;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{background:#1976d2;color:white;border:none;}
+button:hover{opacity:0.9;}
+
+.deleteBtn{background:#dc3545;}
+.editBtn{background:#28a745;}
+.soldBtn{background:#ff9800;}
+.undoBtn{background:#6c757d;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+th,td{border:1px solid #ccc;padding:5px;text-align:center;}
+thead th{background:#1976d2;color:white;position:sticky;top:0;}
+
+.monthHeader{
+background:#444;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.hiddenRow{display:none;}
+.plus{color:green;font-weight:bold;}
+.minus{color:red;font-weight:bold;}
+.summary{margin-top:10px;font-weight:bold;}
+.reportBox{margin-top:15px;background:#eef2f7;padding:10px;border-radius:10px;}
+.totalRow{background:#ddd;font-weight:bold;}
+.listing{background:#eee;color:#666;}
+</style>
+</head>
+
+<body>
+
+<header>
+<button onclick="showPage('inputPage')">📥物販入力</button>
+<button onclick="showPage('listPage')">📦物販管理表</button>
+<button onclick="showPage('calcPage')">🧮利益計算</button>
+</header>
+
+<!-- ================= 物販入力 ================= -->
+<div id="inputPage" class="page active">
+<h2>📥 物販入力</h2>
+<div class="box">
+
+<input id="product" placeholder="商品名">
+
+<select id="category">
+<option value="">カテゴリ</option>
+<option>不用品</option><option>格安</option>
+<option>Amazon</option><option>アパレル</option>
+<option>国際輸入</option><option>無在庫</option>
+<option>ブランド</option>
+</select>
+
+<select id="platform">
+<option value="">出品場所</option>
+<option>メルカリ</option>
+<option>Yahoo！フリマ</option>
+<option>ラクマ</option>
+<option>ヤフオク</option>
+<option>ジモティ</option>
+</select>
+
+<input id="cost" type="number" placeholder="仕入">
+<input id="sales" type="number" placeholder="売上（空なら出品中）">
+
+<select id="shipping">
+<option value="0">送料選択</option>
+<option value="160">ゆうパケットmini160</option>
+<option value="215">ゆうパケットポスト215</option>
+<option value="230">ゆうパケット230</option>
+<option value="455">ゆうパケットプラス455</option>
+<option value="210">ネコポス210</option>
+<option value="450">宅急便コンパクト450</option>
+</select>
+
+<input id="shippingManual" type="number" placeholder="送料 手入力">
+<input id="manualFee" type="number" placeholder="手数料 手入力">
+
+出品日:<input id="listDate" type="date">
+売上日:<input id="saleDate" type="date">
+
+<button id="addBtn">追加</button>
+
+</div>
+</div>
+
+<!-- ================= 物販管理表 ================= -->
+<div id="listPage" class="page">
+<h2>📦 物販管理表</h2>
+<div class="box">
+
+<table>
+<thead>
+<tr>
+<th>状態</th><th>出品日</th><th>売上日</th>
+<th>商品</th><th>カテゴリ</th><th>場所</th>
+<th>仕入</th><th>売上</th>
+<th>送料</th><th>手数料</th>
+<th>利益</th><th>利益率</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+<div class="summary">
+仕入合計 ¥<span id="sumCost">0</span><br>
+売上合計 ¥<span id="sumSales">0</span><br>
+利益合計 ¥<span id="sumProfit">0</span>
+</div>
+
+<hr>
+
+<div class="reportBox">
+<h3>📊 売上レポート</h3>
+年度:<select id="repYear"></select>
+月:
+<select id="repMonth">
+<option value="all">年間</option>
+<option value="01">1月</option><option value="02">2月</option>
+<option value="03">3月</option><option value="04">4月</option>
+<option value="05">5月</option><option value="06">6月</option>
+<option value="07">7月</option><option value="08">8月</option>
+<option value="09">9月</option><option value="10">10月</option>
+<option value="11">11月</option><option value="12">12月</option>
+</select>
+<button id="makeReportBtn">レポート作成</button>
+<div id="reportResult"></div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= 利益計算 ================= -->
+<div id="calcPage" class="page">
+<h2>🧮 利益計算</h2>
+<div class="box">
+
+<input type="number" id="c_cost" placeholder="仕入れ値">
+<input type="number" id="c_price" placeholder="販売価格">
+
+<select id="c_feeSelect">
+<option value="0.10">メルカリ（10%）</option>
+<option value="0.05">Yahooフリマ（5%）</option>
+<option value="0.10">ヤフオク（10%）</option>
+<option value="custom">手入力</option>
+</select>
+<input type="number" id="c_customFee" placeholder="手数料％入力" style="display:none;">
+
+<select id="c_shipSelect">
+<option value="160">ゆうパケットmini160</option>
+<option value="215">ゆうパケットポスト215</option>
+<option value="230">ゆうパケット230</option>
+<option value="455">ゆうパケットプラス455</option>
+<option value="210">ネコポス210</option>
+<option value="450">宅急便コンパクト450</option>
+<option value="custom">手入力</option>
+</select>
+<input type="number" id="c_customShip" placeholder="送料入力" style="display:none;">
+
+<p>利益：<span id="c_profit">0</span> 円</p>
+<p>利益率：<span id="c_rate">0</span> %</p>
+
+</div>
+</div>
+
+<script>
+/* ===== ページ切替 ===== */
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* ===== 元物販ロジック完全維持 ===== */
+let data=JSON.parse(localStorage.getItem("buppan"))||[];
+let editIndex=null;
+const today=new Date().toISOString().slice(0,10);
+document.getElementById("listDate").value=today;
+
+function save(){localStorage.setItem("buppan",JSON.stringify(data));}
+
+function calcFee(item){
+if(item.sales<=0)return 0;
+if(item.platform==="メルカリ"||item.platform==="ヤフオク")
+return Math.floor(item.sales*0.10);
+if(item.platform==="Yahoo！フリマ")
+return Math.floor(item.sales*0.05);
+return item.manualFee||0;
+}
+
+function calcProfit(item){
+return item.sales-item.cost-item.shipping-calcFee(item);
+}
+
+function toggleMonth(cls){
+document.querySelectorAll("."+cls)
+.forEach(r=>r.classList.toggle("hiddenRow"));
+}
+
+function render(){
+tableBody.innerHTML="";
+let sumC=0,sumS=0,sumP=0;
+let soldByMonth={}, listing=[];
+
+data.forEach((item,i)=>{
+if(item.sales>0 && item.saleDate){
+let key=item.saleDate.slice(0,7);
+if(!soldByMonth[key])soldByMonth[key]=[];
+soldByMonth[key].push({item,i});
+}else{
+listing.push({item,i});
+}
+});
+
+listing.sort((a,b)=>new Date(b.item.listDate||0)-new Date(a.item.listDate||0));
+
+Object.keys(soldByMonth).forEach(month=>{
+soldByMonth[month].sort((a,b)=>new Date(b.item.saleDate)-new Date(a.item.saleDate));
+});
+
+listing.forEach(obj=>{
+let tr=createRow(obj.item,obj.i);
+tr.classList.add("listing");
+tableBody.appendChild(tr);
+});
+
+Object.keys(soldByMonth)
+.sort((a,b)=>b.localeCompare(a))
+.forEach(month=>{
+let header=document.createElement("tr");
+header.innerHTML=
+`<td colspan="13" class="monthHeader"
+onclick="toggleMonth('m${month.replace('-','')}')">
+📅 ${month} 売上済（${soldByMonth[month].length}件）
+</td>`;
+tableBody.appendChild(header);
+
+soldByMonth[month].forEach(obj=>{
+let tr=createRow(obj.item,obj.i);
+tr.classList.add("m"+month.replace('-',''),"hiddenRow");
+tableBody.appendChild(tr);
+});
+});
+
+data.forEach(item=>{
+sumC+=item.cost;
+sumS+=item.sales;
+if(item.sales>0)sumP+=calcProfit(item);
+});
+
+sumCost.textContent=sumC;
+sumSales.textContent=sumS;
+sumProfit.textContent=sumP;
+
+save();
+populateYears();
+}
+
+function createRow(item,i){
+let sold=item.sales>0;
+let profit=sold?calcProfit(item):0;
+let rate=sold?((profit/item.sales)*100).toFixed(1)+"%":"-";
+
+let tr=document.createElement("tr");
+tr.innerHTML=`
+<td>${sold?"売上済":"出品中"}</td>
+<td>${item.listDate||""}</td>
+<td>${sold?item.saleDate:"-"}</td>
+<td>${item.product}</td>
+<td>${item.category}</td>
+<td>${item.platform}</td>
+<td>¥${item.cost}</td>
+<td>${sold?"¥"+item.sales:"-"}</td>
+<td>¥${item.shipping}</td>
+<td>${sold?"¥"+calcFee(item):"-"}</td>
+<td class="${profit>=0?"plus":"minus"}">
+${sold?"¥"+profit:"-"}</td>
+<td>${rate}</td>
+<td>
+${!sold?`<button class="soldBtn"
+onclick="markSold(${i})">売上済</button>`:""}
+${sold?`<button class="undoBtn"
+onclick="undoSold(${i})">取消</button>`:""}
+<button class="editBtn"
+onclick="editItem(${i})">編集</button>
+<button class="deleteBtn"
+onclick="delItem(${i})">削除</button>
+</td>`;
+return tr;
+}
+
+document.getElementById("addBtn").onclick=function(){
+let obj={
+product:product.value,
+category:category.value,
+platform:platform.value,
+cost:Number(cost.value||0),
+sales:Number(sales.value||0),
+shipping:Number(shippingManual.value||shipping.value||0),
+manualFee:Number(manualFee.value||0),
+listDate:listDate.value,
+saleDate:saleDate.value
+};
+if(editIndex!==null){
+data[editIndex]=obj;
+editIndex=null;
+}else{
+data.push(obj);
+}
+product.value=category.value=platform.value="";
+cost.value=sales.value="";
+shipping.value="0";
+shippingManual.value="";
+manualFee.value="";
+saleDate.value="";
+render();
+showPage("listPage");
+};
+
+window.editItem=function(i){
+let it=data[i];
+product.value=it.product;
+category.value=it.category;
+platform.value=it.platform;
+cost.value=it.cost;
+sales.value=it.sales||"";
+shipping.value=it.shipping;
+manualFee.value=it.manualFee||"";
+listDate.value=it.listDate||today;
+saleDate.value=it.saleDate||"";
+editIndex=i;
+showPage("inputPage");
+};
+
+window.delItem=function(i){data.splice(i,1);render();}
+window.markSold=function(i){
+let price=prompt("売上金額を入力");
+if(!price)return;
+data[i].sales=parseInt(price);
+data[i].saleDate=today;
+render();
+};
+window.undoSold=function(i){
+data[i].sales=0;
+data[i].saleDate="";
+render();
+};
+
+/* ===== レポート（利益率追加済） ===== */
+document.getElementById("makeReportBtn").onclick=function(){
+let y=repYear.value;
+let m=repMonth.value;
+let cats=["不用品","格安","Amazon","アパレル","国際輸入","無在庫","ブランド"];
+let sum={};
+cats.forEach(c=>sum[c]={sales:0,profit:0});
+
+data.forEach(d=>{
+if(d.sales>0 && d.saleDate){
+let [yy,mm]=d.saleDate.split("-");
+if(yy===y&&(m==="all"||mm===m)){
+sum[d.category].sales+=d.sales;
+sum[d.category].profit+=calcProfit(d);
+}
+}
+});
+
+let html="<table><tr><th>項目</th>";
+cats.forEach(c=>html+=`<th>${c}</th>`);
+html+="</tr>";
+
+html+="<tr><th>売上</th>";
+cats.forEach(c=>html+=`<td>¥${sum[c].sales}</td>`);
+html+="</tr>";
+
+html+="<tr><th>利益</th>";
+cats.forEach(c=>html+=`<td>¥${sum[c].profit}</td>`);
+html+="</tr>";
+
+html+="<tr><th>利益率</th>";
+cats.forEach(c=>{
+let rate=sum[c].sales>0?
+((sum[c].profit/sum[c].sales)*100).toFixed(1)+"%":"-";
+html+=`<td>${rate}</td>`;
+});
+html+="</tr>";
+
+let totalS=0,totalP=0;
+cats.forEach(c=>{
+totalS+=sum[c].sales;
+totalP+=sum[c].profit;
+});
+let totalRate=totalS>0?
+((totalP/totalS)*100).toFixed(1):"-";
+
+html+=`<tr class="totalRow">
+<td>合計</td>
+<td colspan="${cats.length}">
+売上 ¥${totalS} ／ 利益 ¥${totalP} ／ 利益率 ${totalRate}%
+</td></tr></table>`;
+
+reportResult.innerHTML=html;
+};
+
+function populateYears(){
+let ys=[...new Set(data.filter(d=>d.saleDate)
+.map(d=>d.saleDate.split("-")[0]))];
+if(ys.length===0)ys=[today.split("-")[0]];
+repYear.innerHTML=ys.map(y=>`<option>${y}</option>`).join("");
+}
+
+/* ===== せどり計算 ===== */
+function updateSedori(){
+let cost=Number(c_cost.value||0);
+let price=Number(c_price.value||0);
+
+let feeRate;
+if(c_feeSelect.value==="custom"){
+feeRate=Number(c_customFee.value||0)/100;
+}else{
+feeRate=Number(c_feeSelect.value);
+}
+
+let ship;
+if(c_shipSelect.value==="custom"){
+ship=Number(c_customShip.value||0);
+}else{
+ship=Number(c_shipSelect.value);
+}
+
+let fee=price*feeRate;
+let profit=price-fee-ship-cost;
+let rate=price>0?((profit/price)*100):0;
+
+c_profit.textContent=profit.toFixed(0);
+c_rate.textContent=rate.toFixed(1);
+}
+
+c_feeSelect.onchange=function(){
+c_customFee.style.display=this.value==="custom"?"block":"none";
+updateSedori();
+};
+c_shipSelect.onchange=function(){
+c_customShip.style.display=this.value==="custom"?"block":"none";
+updateSedori();
+};
+
+["c_cost","c_price","c_customFee","c_customShip"]
+.forEach(id=>document.getElementById(id).oninput=updateSedori);
+
+render();
+</script>
+
+</body>
+</html>
