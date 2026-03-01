@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTFOLIO — 赤坂 翔星</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@300;400;600&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ==============================
+       CSS Variables
+    ============================== */
+    :root {
+      --red:    #D94040;
+      --teal:   #5DB8B2;
+      --dark:   #1A1A1A;
+      --mid:    #555555;
+      --light:  #9A9A9A;
+      --bg:     #FFFFFF;
+      --bg2:    #F7F7F5;
+      --border: #E0E0DC;
+      --page-w: 210mm;
+      --page-h: 297mm;
+    }
+
+    /* ==============================
+       Reset & Base
+    ============================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #EFEFEC;
+      color: var(--dark);
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       Page Shell (A4 book look)
+    ============================== */
+    .book-wrapper {
+      max-width: 900px;
+      margin: 40px auto;
+      box-shadow: 0 8px 60px rgba(0,0,0,0.18);
+    }
+
+    /* ==============================
+       Each A4 Page
+    ============================== */
+    .page {
+      width: 100%;
+      background: var(--bg);
+      position: relative;
+      padding: 20mm 18mm 16mm;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+    .page + .page { margin-top: 0; }
+
+    /* ==============================
+       Page Header Bar
+    ============================== */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--dark);
+      padding-bottom: 4px;
+      margin-bottom: 14mm;
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .page-header .folio {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    /* ==============================
+       Section Number Badge  (like "00" underlined)
+    ============================== */
+    .sec-badge {
+      display: inline-block;
+      font-family: 'Barlow', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      border-bottom: 4px solid var(--red);
+      padding-bottom: 2px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .sec-label {
+      font-family: 'Barlow', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 10mm;
+    }
+
+    /* ==============================
+       Diamond / Lattice Pattern  (CSS only)
+    ============================== */
+    .diamond-bg {
+      position: absolute;
+      width: 220px;
+      height: 240px;
+      pointer-events: none;
+    }
+    .diamond-bg svg { width: 100%; height: 100%; }
+
+    /* ==============================
+       ── PAGE 01  Cover ──
+    ============================== */
+    #p-cover {
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 297mm;
+      padding: 0;
+      overflow: hidden;
+    }
+    .cover-graphic {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    /* Large teal diagonal stripes */
+    .cover-graphic::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -30%;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent 0px,
+        transparent 38px,
+        rgba(93,184,178,0.12) 38px,
+        rgba(93,184,178,0.12) 40px
+      );
+    }
+    /* Red accent block */
+    .cover-graphic::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 55%;
+      height: 45%;
+      background: var(--red);
+      clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+      opacity: 0.92;
+    }
+    .cover-teal-block {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 42%;
+      height: 55%;
+      background: var(--teal);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 15% 100%);
+      opacity: 0.85;
+    }
+    .cover-content {
+      position: relative;
+      z-index: 10;
+      padding: 16mm 18mm 18mm;
+    }
+    .cover-tag {
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 8px;
+    }
+    .cover-title {
+      font-family: 'Barlow', sans-serif;
+      font-size: 62px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .cover-title span { color: var(--teal); }
+    .cover-name-ja {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: #fff;
+      margin-top: 8px;
+      letter-spacing: 0.18em;
+    }
+    .cover-sub {
+      font-family: 'Barlow', sans-serif;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.60);
+      margin-top: 10px;
+      line-height: 1.9;
+    }
+    .cover-year {
+      position: absolute;
+      top: 18mm;
+      left: 18mm;
+      font-family: 'Barlow', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      z-index: 10;
+    }
+    .cover-index {
+      position: absolute;
+      bottom: 18mm;
+      right: 18mm;
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-align: right;
+      color: rgba(255,255,255,0.4);
+      z-index: 10;
+      line-height: 2;
+    }
+
+    /* ==============================
+       ── PAGE 02  Profile ──
+    ============================== */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 10mm;
+      align-items: start;
+    }
+    .profile-photo-col {
+      position: relative;
+    }
+    .photo-frame {
+      width: 200px;
+      height: 230px;
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Diamond pattern overlay on photo placeholder */
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-conic-gradient(var(--red) 0% 25%, transparent 0% 50%) 0 0 / 18px 18px,
+        repeating-conic-gradient(var(--teal) 0% 25%, transparent 0% 50%) 9px 9px / 18px 18px;
+      opacity: 0.18;
+    }
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+    /* Decorative diamond shapes beside photo */
+    .deco-diamonds {
+      position: absolute;
+      right: -30px;
+      top: 20px;
+      width: 60px;
+      height: 200px;
+    }
+    .profile-info h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .profile-info h2 span {
+      display: block;
+      font-family: 'Barlow', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--mid);
+      margin-bottom: 6px;
+    }
+    .profile-info .affil {
+      font-size: 11.5px;
+      color: var(--mid);
+      border-left: 3px solid var(--red);
+      padding-left: 10px;
+      margin: 10px 0 14px;
+      line-height: 1.9;
+    }
+    .profile-info .bio {
+      font-size: 12.5px;
+      color: var(--dark);
+      line-height: 2.1;
+    }
+    .profile-info .bio p + p { margin-top: 10px; }
+
+    /* ==============================
+       ── PAGE 03  Qualifications ──
+    ============================== */
+    .qual-list {
+      list-style: none;
+      margin-top: 4mm;
+    }
+    .qual-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .qual-list li:first-child { border-top: 1px solid var(--border); }
+    .qual-num {
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--light);
+      min-width: 22px;
+    }
+    .qual-name {
+      font-weight: 500;
+      color: var(--dark);
+      flex: 1;
+    }
+    .qual-note {
+      font-family: 'Barlow', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      color: var(--teal);
+      text-transform: uppercase;
+      background: rgba(93,184,178,0.08);
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+    .qual-comment {
+      margin-top: 6mm;
+      padding: 12px 16px;
+      background: var(--bg2);
+      border-left: 3px solid var(--teal);
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.9;
+    }
+
+    /* ==============================
+       ── PAGE 04  Skills ──
+    ============================== */
+    .skills-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8mm 10mm;
+    }
+    .skill-group {
+      margin-bottom: 2mm;
+    }
+    .skill-group-title {
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      border-bottom: 1px solid var(--red);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+    }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .skill-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Barlow', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0;
+    }
+    .skill-icon.teal  { background: var(--teal); }
+    .skill-icon.red   { background: var(--red); }
+    .skill-icon.gray  { background: var(--mid); }
+    .skill-name { color: var(--dark); font-weight: 400; flex: 1; }
+    .skill-bar-wrap {
+      width: 60px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .skill-bar { height: 100%; background: var(--dark); border-radius: 1px; }
+    .skill-comment {
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--light);
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       ── PAGES 05-06  Design Works ──
+    ============================== */
+    .works-list { display: flex; flex-direction: column; gap: 8mm; }
+    .work-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 6mm;
+      align-items: start;
+    }
+    .work-num-col { text-align: right; }
+    .work-num {
+      font-family: 'Barlow', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--border);
+    }
+    .work-year {
+      font-family: 'Barlow', sans-serif;
+      font-size: 8.5px;
+      letter-spacing: 0.12em;
+      color: var(--light);
+    }
+    .work-content {}
+    .work-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .work-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .work-tag {
+      font-family: 'Barlow', sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: rgba(217,64,64,0.07);
+      padding: 2px 7px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .work-desc {
+      font-size: 12px;
+      color: var(--mid);
+      line-height: 1.95;
+    }
+    /* Image placeholder for works */
+    .work-img {
+      width: 100%;
+      height: 55px;
+      background: var(--bg2);
+      margin-top: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .work-img::after {
+      content: 'IMAGE';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow', sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      color: var(--border);
+    }
+
+    /* ==============================
+       ── PAGE 07  Community + Strengths ──
+    ============================== */
+    .two-col-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10mm;
+    }
+    .activity-block {}
+    .activity-title {
+      font-family: 'Barlow', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .activity-body { font-size: 12px; color: var(--mid); line-height: 2; }
+    .activity-list {
+      list-style: none;
+      margin-top: 6px;
+    }
+    .activity-list li {
+      font-size: 12px;
+      color: var(--dark);
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .activity-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--red);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+    .strength-list { list-style: none; margin-top: 4px; }
+    .strength-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--dark);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      line-height: 1.7;
+    }
+    .str-check {
+      width: 18px;
+      height: 18px;
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ==============================
+       ── PAGE 08  Vision ──
+    ============================== */
+    .vision-page { background: var(--dark); }
+    .vision-page .page-header { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.4); }
+    .vision-page .page-header .folio { color: rgba(255,255,255,0.7); }
+    .vision-page .sec-badge { color: #fff; border-color: var(--teal); }
+    .vision-page .sec-label { color: rgba(255,255,255,0.4); }
+    .vision-quote {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: #fff;
+      line-height: 2.2;
+      letter-spacing: 0.08em;
+      margin: 8mm 0;
+      padding-left: 6mm;
+      border-left: 3px solid var(--teal);
+    }
+    .vision-sub {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.6);
+      line-height: 2.1;
+      max-width: 420px;
+    }
+    /* Large decorative number */
+    .vision-deco-num {
+      position: absolute;
+      bottom: -20px;
+      right: 16mm;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 900;
+      font-size: 200px;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+    .vision-diamond-grid {
+      position: absolute;
+      bottom: 14mm;
+      right: 14mm;
+      width: 120px;
+      height: 120px;
+      opacity: 0.15;
+    }
+
+    /* ==============================
+       Decorative helpers
+    ============================== */
+    .red-line {
+      display: block;
+      width: 32px;
+      height: 3px;
+      background: var(--red);
+      margin: 6mm 0 4mm;
+    }
+    .teal-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--teal);
+      transform: rotate(45deg);
+      margin-right: 6px;
+    }
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 8mm 0;
+    }
+
+    /* ==============================
+       PRINT STYLES
+    ============================== */
+    @media print {
+      body { background: #fff; }
+      .book-wrapper {
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+      }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        page-break-after: always;
+        break-after: page;
+        margin: 0;
+        padding: 18mm 16mm 14mm;
+      }
+      #p-cover { min-height: 297mm; }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+
+    /* ==============================
+       Print button (screen only)
+    ============================== */
+    .print-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      z-index: 999;
+      transition: background 0.2s;
+    }
+    .print-btn:hover { background: var(--red); }
+    @media print { .print-btn { display: none; } }
+
+  </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨 Print / PDF</button>
+
+<div class="book-wrapper">
+
+  <!-- ============================
+       PAGE 01 — COVER
+  ============================= -->
+  <section class="page" id="p-cover">
+    <div class="cover-graphic"></div>
+    <div class="cover-teal-block"></div>
+
+    <div class="cover-year">2024 — 2028</div>
+
+    <div class="cover-content">
+      <div class="cover-tag">Architecture &amp; Design Portfolio</div>
+      <div class="cover-title">PORT<span>FOLIO</span></div>
+      <div class="cover-name-ja">赤坂 翔星</div>
+      <div class="cover-sub">
+        AKASAKA  SHOHSEI<br>
+        摂南大学 理工学部 住環境デザイン学科<br>
+        2028年3月 卒業見込み
+      </div>
+    </div>
+
+    <div class="cover-index">
+      01 — Profile<br>
+      02 — Qualifications<br>
+      03 — Skills<br>
+      04 — Design Works<br>
+      05 — Community<br>
+      06 — Vision
+    </div>
+  </section>
+
+
+  <!-- ============================
+       PAGE 02 — PROFILE
+  ============================= -->
+  <section class="page">
+    <div class="page-header">
+      <span>Profile</span>
+      <span class="folio">Akasaka Shohsei — 01</span>
+    </div>
+
+    <div class="sec-badge">01</div>
+    <div class="sec-label">Profile</div>
+
+    <div class="profile-grid">
+      <!-- Left: photo -->
+      <div class="profile-photo-col">
+        <div class="photo-frame">
+          <div class="photo-placeholder">Photo</div>
+        </div>
+        <!-- Decorative diamonds -->
+        <svg class="deco-diamonds" viewBox="0 0 60 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="5"  width="18" height="18" transform="rotate(45 24 14)" fill="#D94040" opacity="0.85"/>
+          <rect x="15" y="40" width="18" height="18" transform="rotate(45 24 49)" fill="#5DB8B2" opacity="0.7"/>
+          <rect x="5"  y="75" width="14" height="14" transform="rotate(45 12 82)" fill="#D94040" opacity="0.4"/>
+          <rect x="22" y="75" width="14" height="14" transform="rotate(45 29 82)" fill="#5DB8B2" opacity="0.4"/>
+          <rect x="15" y="108" width="18" height="18" transform="rotate(45 24 117)" fill="#D94040" opacity="0.6"/>
+          <rect x="5"  y="140" width="12" height="12" transform="rotate(45 11 146)" fill="#5DB8B2" opacity="0.3"/>
+          <rect x="25" y="140" width="12" height="12" transform="rotate(45 31 146)" fill="#D94040" opacity="0.3"/>
+          <rect x="15" y="168" width="16" height="16" transform="rotate(45 23 176)" fill="#5DB8B2" opacity="0.5"/>
+        </svg>
+      </div>
+
+      <!-- Right: info -->
+      <div class="profile-info">
+        <h2>
+          <span>AKASAKA  SHOHSEI</span>
+          赤坂 翔星
+        </h2>
+        <div class="affil">
+          摂南大学 理工学部<br>
+          住環境デザイン学科<br>
+          2028年3月 卒業見込み
+        </div>
+        <div class="bio">
+          <p>私は「人の居場所をつくる建築」を軸に、<br>設計課題や地域活動に取り組んできました。</p>
+          <p>空間の美しさだけでなく、<br>実現性・社会性・持続性を意識しながら<br>設計することを大切にしています。</p>
+          <p>二級建築施工管理技士補を取得し、<br>設計と施工の両視点から建築を考える<br>姿勢を身につけました。</p>
+          <p>将来は、社会に長く愛される建築を<br>実現できる技術者を目指しています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================
+       PAGE 03 — QUALIFICATIONS
+  ============================= -->
+  <section class="page">
+    <div class="page-header">
+      <span>Qualifications</span>
+      <span class="folio">Akasaka Shohsei — 02</span>
+    </div>
+
+    <div class="sec-badge">02</div>
+    <div class="sec-label">保有資格 / Qualifications</div>
+
+    <ul class="qual-list">
+      <li>
+        <span class="qual-num">01</span>
+        <span class="qual-name">二級建築施工管理技士補</span>
+        <span class="qual-note">取得済</span>
+      </li>
+      <li>
+        <span class="qual-num">02</span>
+        <span class="qual-name">eco検定（環境社会検定）</span>
+        <span class="qual-note">取得済</span>
+      </li>
+      <li>
+        <span class="qual-num">03</span>
+        <span class="qual-name">パソコン利用技術検定 二級</span>
+        <span class="qual-note">取得済</span>
+      </li>
+      <li>
+        <span class="qual-num">04</span>
+        <span class="qual-name">フォークリフト技能講習 修了</span>
+        <span class="qual-note">修了</span>
+      </li>
+      <li>
+        <span class="qual-num">05</span>
+        <span class="qual-name">普通自動車第一種運転免許</span>
+        <span class="qual-note">取得済</span>
+      </li>
+    </ul>
+
+    <div class="qual-comment">
+      施工管理技士補の学習を通して、工程・安全・品質の基礎知識を習得。<br>
+      設計と現場の両面から建築に向き合う姿勢を育んできました。
+    </div>
+  </section>
+
+
+  <!-- ============================
+       PAGE 04 — SKILLS
+  ============================= -->
+  <section class="page">
+    <div class="page-header">
+      <span>Skills</span>
+      <span class="folio">Akasaka Shohsei — 03</span>
+    </div>
+
+    <div class="sec-badge">03</div>
+    <div class="sec-label">Skills</div>
+
+    <div class="skills-cols">
+
+      <!-- CAD / BIM -->
+      <div class="skill-group">
+        <div class="skill-group-title">設計・CAD / BIM</div>
+        <div class="skill-item">
+          <div class="skill-icon" style="font-size:7.5px;">JW</div>
+          <span class="skill-name">JW-CAD</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon teal" style="font-size:7px;">AUTO</div>
+          <span class="skill-name">AutoCAD</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:72%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon" style="font-size:7px;">ARCH</div>
+          <span class="skill-name">Archicad</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:65%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon teal" style="font-size:7.5px;">SKP</div>
+          <span class="skill-name">SketchUp</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon red" style="font-size:7.5px;">RH</div>
+          <span class="skill-name">Rhinoceros</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:60%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon gray" style="font-size:7px;">GH</div>
+          <span class="skill-name">Grasshopper</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:50%"></div></div>
+        </div>
+        <div class="skill-comment">2D図面作成から3Dモデリング、BIM設計、パラメトリックデザインまで対応可能。</div>
+      </div>
+
+      <!-- Rendering -->
+      <div class="skill-group">
+        <div class="skill-group-title">レンダリング</div>
+        <div class="skill-item">
+          <div class="skill-icon teal" style="font-size:7.5px;">LM</div>
+          <span class="skill-name">Lumion</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+        </div>
+        <div class="skill-comment">外観・内観パース制作が可能。<br>光の入り方や素材感、スケール感を意識した表現を心掛けています。</div>
+
+        <div style="margin-top:8mm;">
+          <div class="skill-group-title">ビジュアル制作</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon red" style="font-size:7.5px;">Ai</div>
+          <span class="skill-name">Adobe Illustrator</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon red" style="font-size:7px;">Ps</div>
+          <span class="skill-name">Adobe Photoshop</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:68%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon teal" style="font-size:7.5px;">CV</div>
+          <span class="skill-name">Canva</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+        </div>
+        <div class="skill-comment">プレゼンボード・ポスター制作、写真編集が可能。</div>
+
+        <div style="margin-top:8mm;">
+          <div class="skill-group-title">Office</div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon gray" style="font-size:7px;">XL</div>
+          <span class="skill-name">Excel</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon gray" style="font-size:7px;">PP</div>
+          <span class="skill-name">PowerPoint</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-icon gray" style="font-size:7px;">WD</div>
+          <span class="skill-name">Word</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================
+       PAGE 05 — DESIGN WORKS  (1/2)
+  ============================= -->
+  <section class="page">
+    <div class="page-header">
+      <span>Design Works</span>
+      <span class="folio">Akasaka Shohsei — 04</span>
+    </div>
+
+    <div class="sec-badge">04</div>
+    <div class="sec-label">設計課題 / Design Works</div>
+
+    <div class="works-list">
+
+      <div class="work-item">
+        <div class="work-num-col">
+          <div class="work-num">01</div>
+          <div class="work-year">1年次</div>
+        </div>
+        <div class="work-content">
+          <div class="work-title">
+            「白の家」
+            <span class="work-tag">住宅設計</span>
+          </div>
+          <div class="work-img"></div>
+          <div class="work-desc">
+            白という制限の中で、光と陰影による空間の豊かさを探求。<br>
+            ミニマルな構成の中に居心地の良さを追求しました。
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="work-num-col">
+          <div class="work-num">02</div>
+          <div class="work-year">2年前期</div>
+        </div>
+        <div class="work-content">
+          <div class="work-title">
+            「住宅」
+            <span class="work-tag">住宅設計</span>
+          </div>
+          <div class="work-img"></div>
+          <div class="work-desc">
+            敷地条件と周辺環境を読み取り、家族構成を想定した住宅を設計。<br>
+            動線計画とプライバシーのバランスを重視しました。
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="work-num-col">
+          <div class="work-num">03</div>
+          <div class="work-year">2年後期</div>
+        </div>
+        <div class="work-content">
+          <div class="work-title">
+            「想像館」
+            <span class="work-tag">公共建築</span>
+          </div>
+          <div class="work-img"></div>
+          <div class="work-desc">
+            人の創造性を引き出す公共空間をテーマに設計。<br>
+            内外のつながりを意識し、開放性のある構成を提案しました。
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="work-num-col">
+          <div class="work-num">04</div>
+          <div class="work-year">2年後期</div>
+        </div>
+        <div class="work-content">
+          <div class="work-title">
+            「子ども食堂付き集合住宅」
+            <span class="work-tag">集合住宅 / 地域</span>
+          </div>
+          <div class="work-img"></div>
+          <div class="work-desc">
+            地域コミュニティと住空間を融合させた提案。<br>
+            世代間交流が生まれる仕組みを建築で実現することを目指しました。<br>
+            社会課題に向き合う建築の可能性を学びました。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================
+       PAGE 06 — COMMUNITY + STRENGTHS
+  ============================= -->
+  <section class="page">
+    <div class="page-header">
+      <span>Community &amp; Strengths</span>
+      <span class="folio">Akasaka Shohsei — 05</span>
+    </div>
+
+    <div class="sec-badge">05</div>
+    <div class="sec-label">地域連携活動 / Community Activity</div>
+
+    <div class="activity-block" style="margin-bottom:10mm;">
+      <div class="activity-title">摂南大学50周年プロジェクト「むむぷ」</div>
+      <div class="activity-body">
+        能登地域でのボランティア活動に参加。<br>
+        復興支援活動を行い、以下を担当しました。
+      </div>
+      <ul class="activity-list" style="margin-top:8px;">
+        <li>活動写真集 制作</li>
+        <li>活動ポスター 制作</li>
+      </ul>
+      <div class="qual-comment" style="margin-top:8px;">
+        建築は「つくる」だけでなく、人や想いをつなぐ役割を持つものであることを実感しました。
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="sec-badge">06</div>
+    <div class="sec-label">Strengths</div>
+
+    <ul class="strength-list">
+      <li>
+        <div class="str-check">✓</div>
+        設計と施工の両視点を持つ
+      </li>
+      <li>
+        <div class="str-check">✓</div>
+        3Dモデリングからレンダリングまで一貫対応
+      </li>
+      <li>
+        <div class="str-check">✓</div>
+        パラメトリックデザインへの挑戦姿勢
+      </li>
+      <li>
+        <div class="str-check">✓</div>
+        地域活動で培った行動力
+      </li>
+    </ul>
+  </section>
+
+
+  <!-- ============================
+       PAGE 07 — VISION
+  ============================= -->
+  <section class="page vision-page">
+    <div class="page-header">
+      <span>Vision</span>
+      <span class="folio">Akasaka Shohsei — 06</span>
+    </div>
+
+    <div class="sec-badge">07</div>
+    <div class="sec-label" style="color:rgba(255,255,255,0.4);">将来像 / Vision</div>
+
+    <div class="vision-quote">
+      設計力と現場理解を兼ね備え、<br>
+      人・地域・社会にとって<br>
+      価値のある建築を実現できる<br>
+      技術者になることが目標です。
+    </div>
+
+    <div class="vision-sub">
+      一つひとつのプロジェクトに誠実に向き合い、<br>
+      成長し続けていきたいと考えています。
+    </div>
+
+    <!-- Decorative elements -->
+    <div class="vision-deco-num">07</div>
+
+    <svg class="vision-diamond-grid" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="20" height="20" transform="rotate(45 20 20)" fill="#D94040"/>
+      <rect x="50" y="10" width="20" height="20" transform="rotate(45 60 20)" fill="#5DB8B2"/>
+      <rect x="90" y="10" width="20" height="20" transform="rotate(45 100 20)" fill="#D94040"/>
+      <rect x="10" y="50" width="20" height="20" transform="rotate(45 20 60)" fill="#5DB8B2"/>
+      <rect x="50" y="50" width="20" height="20" transform="rotate(45 60 60)" fill="#D94040"/>
+      <rect x="90" y="50" width="20" height="20" transform="rotate(45 100 60)" fill="#5DB8B2"/>
+      <rect x="10" y="90" width="20" height="20" transform="rotate(45 20 100)" fill="#D94040"/>
+      <rect x="50" y="90" width="20" height="20" transform="rotate(45 60 100)" fill="#5DB8B2"/>
+      <rect x="90" y="90" width="20" height="20" transform="rotate(45 100 100)" fill="#D94040"/>
+    </svg>
+  </section>
+
+</div><!-- /book-wrapper -->
+
+</body>
+</html>
